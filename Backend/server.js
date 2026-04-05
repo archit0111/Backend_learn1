@@ -15,14 +15,19 @@ const schema = joi.object({
     password: joi.string().min(4).max(100).required()
 })
 
+
+
 app.post('/Signup',(req,res)=>{
     console.log("Frontend Talking to backend....",req.body);
     const joiRes = schema.validate(req.body);
     if(joiRes.error){
-        return res.status(400).json(joiRes.error.details[0].message);
+        return res.status(400).json({message : `${joiRes.error.details[0].message}`});
     }
-    res.status(200).json({messsage:"Data Recived Succssesfuly...."});
+    res.status(200).json({message:"Data Recived Succssesfuly...."});
 })
+
+
+
 app.listen(port,()=>{
     console.log(`Server is listening on port: ${port}`);
 })
