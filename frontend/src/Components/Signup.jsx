@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useState } from "react";
 
 function Signup(){
     const [name,setName]= useState("");
