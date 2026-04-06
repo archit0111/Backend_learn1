@@ -1,9 +1,9 @@
 const express = require('express');
 const cors = require('cors');
 const joi = require('joi');
-const port = 8080;
 const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
+require('dotenv').config();
 
 const app = express();
 app.use(cors());
@@ -19,7 +19,7 @@ const schema = joi.object({
 
 //mongoose working
 
-mongoose.connect('mongodb://localhost:27017/userdata')
+mongoose.connect(process.env.DATABASE)
 .then(()=>console.log("MongoDB connected successfuly"))
 .catch(()=>console.log("Error occored in connecting to database"));
 
@@ -52,6 +52,6 @@ app.post('/Signup', async (req,res)=>{
 
 
 
-app.listen(port,()=>{
-    console.log(`Server is listening on port: ${port}`);
+app.listen(process.env.PORT,()=>{
+    console.log(`Server is listening on port: ${process.env.PORT}`);
 })
