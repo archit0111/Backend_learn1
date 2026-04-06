@@ -4,7 +4,10 @@ function Login(){
     const [email,setEmail]= useState("");
     const [password,setPassword]= useState("");
 
-    
+    function handelSubmit(){
+        const intputByUser = {email,password}
+        
+    }
 
     
     return(
@@ -12,7 +15,7 @@ function Login(){
         <div className="bg-blue-500 h-15 text-4xl mb-10 pl-10">Login</div>
         <div className="bg-blue-200 h-9/12 w-1/2 place-self-center">
         <div className="p-5 place-self-center">
-            <form action="/">
+            <form onSubmit={handelSubmit}>
             <label htmlFor="email">Email:</label>
             <input type="email" placeholder="Enter your mail" className="border p-1 block " onChange={(e)=>setEmail(e.target.value)} />
             <label htmlFor="password">Password:</label>

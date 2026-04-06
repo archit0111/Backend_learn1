@@ -3,6 +3,7 @@ const cors = require('cors');
 const joi = require('joi');
 const port = 8080;
 const mongoose = require('mongoose');
+const bcrypt = require('bcrypt');
 
 const app = express();
 app.use(cors());
@@ -39,6 +40,8 @@ app.post('/Signup', async (req,res)=>{
         return res.status(400).json({message : `${joiRes.error.details[0].message}`});
     }
     try{
+        let encryptedPassword = await bcrypt.hash(req.body.password, 12);
+        req.body.password = encryptedPassword;
         const newUser = await User.create(req.body);
         // console.log(newUser);
     }catch(e){
