@@ -4,14 +4,15 @@ function Login(){
     const [email,setEmail]= useState("");
     const [password,setPassword]= useState("");
 
-    function handelSubmit(){
+    function handelSubmit(e){
+        e.preventDefault();
         const inputByUser = {email,password}
 
         try{
             const res = fetch("http://localhost:8080/login",{
-                method: "GET",
-                headers:("Content-Type","application/json"),
-                body:JSOn.stringify(inputByUser)
+                method: "POST",
+                headers:{"Content-Type":"application/json"},
+                body:JSON.stringify(inputByUser)
             })
         }catch(e){
             console.log("Error occered in login request!!");
