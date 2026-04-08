@@ -75,9 +75,15 @@ app.post('/login', async(req,res)=>{
 app.patch('/Dashboard', verifyUser, async (req, res)=>{
     console.log("Dashboard after jwt verification...");
     try{
-        const UpdatedName = req.body.name;
-        const updatedUser = await User.findByIdAndUpdate(req.user._id,
-        {name:UpdatedName},
+        const nameSchema = schema.extract('name');
+        const joiRes = nameSchema.validate(req.body.name);
+        if(joiRes.error){
+            return res.status(401).json({message:`${joiRes.error}`});
+        }
+        const updatedName = req.body.name;
+        console.log(updatedName);
+        const updatedUser = await User.findByIdAndUpdate(req.user.userId,
+        {name:updatedName},
         {returnDocument:'after'}
     );  
     return res.status(200).json({message:"Name changed successfully!!",user:updatedUser});
