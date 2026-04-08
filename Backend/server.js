@@ -58,7 +58,6 @@ app.post('/login', async(req,res)=>{
     console.log("Frontend Talking to backend.... in login",req.body);
     try{
         let user = await User.findOne({email : req.body.email});
-        console.log(user);
         if(!user){
             return res.status(400).json({message:"No user exist!!"});
         }
@@ -70,13 +69,23 @@ app.post('/login', async(req,res)=>{
     }catch(e){
         return res.status(400).json({message:"something went wrong!!"});
     }
-    return res.status(400).json({message:"Password mismathed!! please try again!"});
 })
 
 
-// app.get('/Dasboard', verifyUser, async (req, res)=>{
-//     console.log("Dashboard after jwt verification...");
-// })
+app.patch('/Dashboard', verifyUser, async (req, res)=>{
+    console.log("Dashboard after jwt verification...");
+    try{
+        const UpdatedName = req.body.name;
+        const updatedUser = await User.findByIdAndUpdate(req.user._id,
+        {name:UpdatedName},
+        {returnDocument:'after'}
+    );  
+    return res.status(200).json({message:"Name changed successfully!!",user:updatedUser});
+    }catch(e){
+        console.log(e);
+        return res.status(500).json({message:"Error occoured in updating name"});
+    }
+})
 
 
 app.listen(process.env.PORT,()=>{

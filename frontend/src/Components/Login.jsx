@@ -1,19 +1,29 @@
 import { useState } from "react"
+import {useNavigate} from 'react-router-dom'
 
 function Login(){
     const [email,setEmail]= useState("");
     const [password,setPassword]= useState("");
+    const navigate = useNavigate();
 
-    function handelSubmit(e){
+    const handelSubmit = async(e)=>{
         e.preventDefault();
         const inputByUser = {email,password}
 
         try{
-            const res = fetch("http://localhost:8080/login",{
+            const res = await fetch("http://localhost:8080/login",{
                 method: "POST",
                 headers:{"Content-Type":"application/json"},
                 body:JSON.stringify(inputByUser)
             })
+            const data = await res.json();
+            console.log(data);
+            if(res.ok){
+                localStorage.setItem("token",data.token);
+                navigate('/dashboard');
+            }else{
+                alert(data.message);
+            }
         }catch(e){
             console.log("Error occered in login request!!");
         }
