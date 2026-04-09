@@ -4,7 +4,7 @@ const joi = require('joi');
 const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
 require('dotenv').config();
-const {verifyUser} = require('./Middelwares/authentication');
+const {verifyUser, verifyAdmin} = require('./Middelwares/authentication');
 const {createJwt} = require('./Middelwares/jwtCreation');
 
 const app = express();
@@ -91,6 +91,10 @@ app.patch('/Dashboard', verifyUser, async (req, res)=>{
         console.log(e);
         return res.status(500).json({message:"Error occoured in updating name"});
     }
+})
+
+app.get('/adminPanel',verifyAdmin, async(req,res)=>{
+    res.status(200).json({message:"You have access of adminPanel"});
 })
 
 

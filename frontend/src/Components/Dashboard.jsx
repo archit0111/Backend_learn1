@@ -4,8 +4,21 @@ import {useState} from 'react'
 function Dashboard(){
     const [name,setName]= useState("");
     const navigate = useNavigate();
-    function handelclick(){
-        navigate('/adminPanel');
+    const handelclick  = async()=>{
+       try{
+        const res = await fetch("http://localhost:8080/adminPanel",{
+            method:"GET",
+            headers:{
+                "Content-Type":"aplication/json",
+                "authorization":`Bearer ${localStorage.token}`
+            }
+        });
+        if(res.ok){
+            navigate('/adminPanel');
+        }
+       }catch(e){
+        alert("Please login as admin!!");
+       }
     }
 
     const handelSubmit = async(e)=>{
