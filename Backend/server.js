@@ -29,6 +29,7 @@ const dataSchema = new mongoose.Schema({
     name:String,
     email:String,
     password:String,
+    refreshToken:String,
     role : {type : String, default : "user"}
 })
 
@@ -97,6 +98,17 @@ app.get('/adminPanel',verifyAdmin, async(req,res)=>{
     res.status(200).json({message:"You have access of adminPanel"});
 })
 
+//for refreshToken verification
+
+app.post('/refreshToken', async(req,res)=>{
+    const refreshToken = req.headers["refreshToken"];
+    if(refreshToken){
+        res.status(403).json("Refresh token not provided");
+    }
+    try{
+        const
+    }
+})
 
 app.listen(process.env.PORT,()=>{
     console.log(`Server is listening on port: ${process.env.PORT}`);

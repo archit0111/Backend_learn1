@@ -20,6 +20,7 @@ function Login(){
             console.log(data);
             if(res.ok){
                 localStorage.setItem("token",data.token);
+                localStorage.setItem("refreshToken",data.refreshToken);
                 navigate('/dashboard');
             }else{
                 alert(data.message);

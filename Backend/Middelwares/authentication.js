@@ -2,6 +2,7 @@ const jwt = require('jsonwebtoken');
 
 const verifyUser = async (req, res, next)=>{
     const token = req.headers["authorization"];
+    const refreshToken = req.headers["refreshToken"];
     if(!token){
         return res.status(403).json({message:"Token not provided!!"});
     }

@@ -13,6 +13,22 @@ function Dashboard(){
                 "authorization":`Bearer ${localStorage.token}`
             }
         });
+        if(res.status == 403){
+            try{
+                const res = await fetch("http://localhost:8080/refreshToken",{
+                    method:"POST",
+                    headers:{
+                        "Content-Type":"application/json",
+                        "refreshToken":`${localStorage.refreshToken}`
+                    }
+                })
+                if(res.ok){
+                    navigate('/adminPanel');
+                }
+            }catch(e){
+                alert("Session expired, Login again!");
+            }
+        }
         if(res.ok){
             navigate('/adminPanel');
         }

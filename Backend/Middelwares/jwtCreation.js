@@ -7,8 +7,14 @@ function createJwt(user,res){
     "abcd",
     {expiresIn : "10min"}
     )
-
-    return res.status(200).json({message:"login successfuly!", token:token});
+    const refreshToken = jwt.sign(
+        {userId:user._id},
+        "RefreshSecret",
+        {expiresIn:"1d"}
+    )
+    user.refreshToken = refreshToken;
+    user.save();
+    return res.status(200).json({message:"login successfuly!", token:token, refreshToken:refreshToken});
 }
 
 module.exports = {createJwt}
