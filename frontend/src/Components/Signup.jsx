@@ -14,7 +14,7 @@ function Signup(){
         console.log(userData);
 
         try{
-            const res = await fetch("http://localhost:8080/Signup",{
+            const res = await fetch("http://localhost:8080/api/user/Signup",{
                 method: "POST",
                 headers:{"Content-Type":"application/json"},
                 body:JSON.stringify(userData)

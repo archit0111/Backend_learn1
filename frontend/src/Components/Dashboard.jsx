@@ -6,7 +6,7 @@ function Dashboard(){
     const navigate = useNavigate();
     const handelclick  = async()=>{
        try{
-        const res = await fetch("http://localhost:8080/adminPanel",{
+        const res = await fetch("http://localhost:8080/api/user/adminPanel",{
             method:"GET",
             headers:{
                 "Content-Type":"aplication/json",
@@ -16,7 +16,7 @@ function Dashboard(){
         if(!res.ok){
             try{
                 alert("inside calling reftok");
-                const res = await fetch("http://localhost:8080/refreshToken",{
+                const res = await fetch("http://localhost:8080/api/user/refreshToken",{
                     method:"POST",
                     headers:{
                         "Content-Type":"application/json",
@@ -43,7 +43,7 @@ function Dashboard(){
         e.preventDefault();
         try{
             alert(name);
-            const res = await fetch('http://localhost:8080/dashboard',{
+            const res = await fetch('http://localhost:8080/api/user/dashboard',{
                 method : "PATCH",
                 headers : {
                     "Content-Type":"application/json",
