@@ -13,8 +13,9 @@ function Dashboard(){
                 "authorization":`Bearer ${localStorage.token}`
             }
         });
-        if(res.status == 403){
+        if(!res.ok){
             try{
+                alert("inside calling reftok");
                 const res = await fetch("http://localhost:8080/refreshToken",{
                     method:"POST",
                     headers:{
@@ -22,14 +23,15 @@ function Dashboard(){
                         "refreshToken":`${localStorage.refreshToken}`
                     }
                 })
+                const data = await res.json();
                 if(res.ok){
+                    localStorage.setItem("token",data.token);
                     navigate('/adminPanel');
                 }
             }catch(e){
                 alert("Session expired, Login again!");
             }
-        }
-        if(res.ok){
+        }else{
             navigate('/adminPanel');
         }
        }catch(e){

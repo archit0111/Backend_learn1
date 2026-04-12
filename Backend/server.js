@@ -1,10 +1,11 @@
 const express = require('express');
 const cors = require('cors');
 const joi = require('joi');
+const jwt = require('jsonwebtoken');
 const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
 require('dotenv').config();
-const {verifyUser, verifyAdmin} = require('./Middelwares/authentication');
+const {verifyUser, verifyAdmin, generateNewToken} = require('./Middelwares/authentication');
 const {createJwt} = require('./Middelwares/jwtCreation');
 
 const app = express();
@@ -101,12 +102,20 @@ app.get('/adminPanel',verifyAdmin, async(req,res)=>{
 //for refreshToken verification
 
 app.post('/refreshToken', async(req,res)=>{
-    const refreshToken = req.headers["refreshToken"];
-    if(refreshToken){
-        res.status(403).json("Refresh token not provided");
+    const refreshToken = req.headers["refreshtoken"];
+    if(!refreshToken){
+        return res.status(403).json("Refresh token not provided");
     }
     try{
-        const
+        const decodedData = await jwt.verify(refreshToken,"RefreshSecret");
+        const user = await User.findById(decodedData.userId);
+        if(!user||user.refreshToken !== refreshToken){
+            return res.status(401).json({message:"Token Expired, Login again!!"});
+        }
+        const newToken = await generateNewToken(user);
+        return  res.status(200).json({message:"Refresh token generated successfully!!", token:newToken});
+    }catch(e){
+        return res.status(403).json("Refresh Token Invalid!! or Expired!!");
     }
 })
 

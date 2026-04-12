@@ -2,7 +2,7 @@ const jwt = require('jsonwebtoken');
 
 const verifyUser = async (req, res, next)=>{
     const token = req.headers["authorization"];
-    const refreshToken = req.headers["refreshToken"];
+    console.log(token);
     if(!token){
         return res.status(403).json({message:"Token not provided!!"});
     }
@@ -39,4 +39,13 @@ const verifyAdmin = async (req,res,next)=>{
     }
 }
 
-module.exports = {verifyUser , verifyAdmin}
+const generateNewToken = async(user)=>{
+    const newToken = await jwt.sign(
+        {userId:user._id,role:user.role},
+        "abcd",
+        {expiresIn:"1min"}
+    )
+    return newToken;
+}
+
+module.exports = {verifyUser , verifyAdmin, generateNewToken}
