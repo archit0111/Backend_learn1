@@ -2,6 +2,8 @@ const { createJwt } = require("../Middelwares/jwtCreation");
 const {schema}= require('../Utils/validation');
 const bcrypt = require('bcrypt')
 const User = require("../Model/User");
+const jwt = require('jsonwebtoken');
+const {generateNewToken} = require('../Middelwares/authentication');
 
 
 exports.signup =  async (req,res)=>{
@@ -69,6 +71,7 @@ exports.adminPanel = async(req,res)=>{
 //for refreshToken verification
 
 exports.refreshToken = async(req,res)=>{
+    console.log("RefreshToken jwt verification...");
     const refreshToken = req.headers["refreshtoken"];
     if(!refreshToken){
         return res.status(403).json("Refresh token not provided");

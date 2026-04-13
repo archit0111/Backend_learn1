@@ -13,7 +13,7 @@ const verifyUser = async (req, res, next)=>{
         console.log("Inside JWT checker and data is: ",decodedData);
         next();
     }catch(e){
-        return res.status(401).json({message:"Invalid or expired token!!"})
+        return res.status(401).json({message:"Invalid or expired token!!"});
     }
 }
 

@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const userControllers = require('../Controller/userControllers');
-const { verifyAdmin, verifyUser, generateNewToken}= require('../Middelwares/authentication')
+const { verifyAdmin, verifyUser}= require('../Middelwares/authentication');
 
 router.post('/login', userControllers.login);
 
