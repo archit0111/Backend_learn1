@@ -4,6 +4,7 @@ const bcrypt = require('bcrypt')
 const User = require("../Model/User");
 const jwt = require('jsonwebtoken');
 const {generateNewToken} = require('../Middelwares/authentication');
+const {OAuth2Client} = require('google-auth-library');
 
 
 exports.signup =  async (req,res)=>{
@@ -88,3 +89,44 @@ exports.refreshToken = async(req,res)=>{
         return res.status(403).json("Refresh Token Invalid!! or Expired!!");
     }
 };
+
+exports.googleLogin = async(req,res)=>{
+    const credentials = req.body.token;
+    if(!credentials){
+        return res.status(401).json({message:"Google token not found!"});
+    }
+    try{
+        const client = new OAuth2Client('272382616790-l9u3oismb1bhjhm1mq8649f4tper5d31.apps.googleusercontent.com');
+        console.log("Google token verification!!");
+        const ticket = await client.verifyIdToken({
+            idToken : credentials,
+            audience:'272382616790-l9u3oismb1bhjhm1mq8649f4tper5d31.apps.googleusercontent.com'
+        });
+        const{email,name} = ticket.getPayload();
+        console.log("Google token verification!!",name,email);
+        let user = await User.findOne({email:email});
+        if(!user){
+            const password = Math.random().toString(36).slice(-8)+"Aa1!";
+            console.log(password);
+            let encryptedPassword = await bcrypt.hash(password, 12);
+            user = {
+                name: name,
+                email:email,
+                password : encryptedPassword,
+                role:'user'
+            };
+            await User.create(user);
+        }else{
+            return res.status(201).json({message:"User exist already! Please login..."});
+        }
+        try{
+            createJwt(user,res);
+        }catch(e){
+            return res.end(JSON.stringify({message:"Error Occred in creation!!"}))
+        }
+
+    }catch(e){
+        console.error("Outer Catch Error:", e.message);
+        res.status(401).json({message:"Invalid google token!!"});
+    }
+}

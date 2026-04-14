@@ -1,4 +1,5 @@
 import { useState } from "react";
+import {GoogleLogin} from "@react-oauth/google";
 
 function Signup(){
     const [name,setName]= useState("");
@@ -7,6 +8,24 @@ function Signup(){
     const [warnnig,setWarnnig]=useState(false);
     const [ok,setOk]=useState(false);
 
+
+    const handelGoogleSuccess = async(credentialResponse)=>{
+        try{
+            alert("sending goolelogin req!!",credentialResponse.credential);
+            const res = await fetch('http://localhost:8080/api/user/googleLogin',{
+                method: "POST",
+                headers:{
+                    "Content-Type":"application/json"
+                },
+                body:JSON.stringify({token:credentialResponse.credential})
+            })
+            if(res.ok){
+                alert("Done!");
+            }
+        }catch(e){
+            console.log("Error occcered in backend!");
+        }
+    }
 
     const handelSubmit= async (e)=>{
         e.preventDefault();
@@ -47,6 +66,10 @@ function Signup(){
             <label htmlFor="password">Password:</label>
             <input type="password" id="password" placeholder="Create Password...." className="border p-1 block " onChange={(e)=>setPassword(e.target.value)} />
             <button type="submit" className="bg-green-500 rounded-xl text-white p-2 mt-5">Submit</button>
+            <div className="w-[95%]">or login with google</div>
+            <GoogleLogin
+            onSuccess={handelGoogleSuccess}
+            onError={()=>alert("Error with login with google!!")}/>
             </form>
         </div>
         </div>

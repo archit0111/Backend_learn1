@@ -5,6 +5,8 @@ const { verifyAdmin, verifyUser}= require('../Middelwares/authentication');
 
 router.post('/login', userControllers.login);
 
+router.post('/googleLogin',userControllers.googleLogin);
+
 router.post('/signup', userControllers.signup);
 
 router.patch('/dashboard', verifyUser, userControllers.dashboard)
