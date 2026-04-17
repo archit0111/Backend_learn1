@@ -8,7 +8,7 @@ const callfornewToken = async()=>{
             method:"POST",
             headers:{
                 "Content-Type":"application/json",
-                "refreshToken":`${localStorage.getItem(refreshToken)}`
+                "refreshToken":`${localStorage.getItem("refreshToken")}`
             }
         });
         const data = await res.json();
@@ -35,7 +35,7 @@ function Dashboard(){
             method:"GET",
             headers:{
                 "Content-Type":"application/json",
-                "authorization":`Bearer ${localStorage.getItem(token)}`
+                "authorization":`Bearer ${localStorage.getItem("token")}`
             }
         });
         if(!res.ok){
@@ -57,13 +57,14 @@ function Dashboard(){
             alert(name);
             const updateName = async()=>{
                 const res = await fetch('http://localhost:8080/api/user/dashboard',{
-                method : "PATCH",
-                headers : {
-                    "Content-Type":"application/json",
-                    "authorization":`Bearer ${localStorage.getItem(token)}`
-                },
-                body : JSON.stringify({name:name}),
+                    method : "PATCH",
+                    headers : {
+                        "Content-Type":"application/json",
+                        "authorization":`Bearer ${localStorage.getItem("token")}`
+                    },
+                    body : JSON.stringify({name:name}),
                 });
+                alert("....... updating name");
                 return res
             }
             const res = await updateName();
@@ -79,7 +80,7 @@ function Dashboard(){
                 alert("Name updated Successfully!!");
             }
         }catch(e){
-            alert("Error in updating name");
+            alert("Error in updating name",e);
         }
     }
 

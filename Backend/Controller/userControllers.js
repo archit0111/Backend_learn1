@@ -55,7 +55,7 @@ exports.dashboard = async (req, res)=>{
             return res.status(401).json({message:`${joiRes.error}`});
         }
         const updatedName = req.body.name;
-        console.log(updatedName);
+        // console.log(updatedName);
         const updatedUser = await User.findByIdAndUpdate(req.user.userId,
         {name:updatedName},
         {returnDocument:'after'}
