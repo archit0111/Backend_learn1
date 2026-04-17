@@ -9,7 +9,7 @@ router.post('/googleLogin',userControllers.googleLogin);
 
 router.post('/signup', userControllers.signup);
 
-router.patch('/dashboard', verifyUser, userControllers.dashboard)
+router.patch('/dashboard', verifyUser, userControllers.dashboard);
 
 router.get('/adminPanel', verifyAdmin, userControllers.adminPanel);
 

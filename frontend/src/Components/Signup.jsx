@@ -1,5 +1,6 @@
 import { useState } from "react";
 import {GoogleLogin} from "@react-oauth/google";
+import { useNavigate } from "react-router-dom";
 
 function Signup(){
     const [name,setName]= useState("");
@@ -7,6 +8,7 @@ function Signup(){
     const [password,setPassword]= useState("");
     const [warnnig,setWarnnig]=useState(false);
     const [ok,setOk]=useState(false);
+    const navigate = useNavigate();
 
 
     const handelGoogleSuccess = async(credentialResponse)=>{
@@ -18,9 +20,13 @@ function Signup(){
                     "Content-Type":"application/json"
                 },
                 body:JSON.stringify({token:credentialResponse.credential})
-            })
-            if(res.ok){
+            });
+            const data = await res.json();
+            if(res.status == 200){
                 alert("Done!");
+            }else{
+                alert(data.message);
+                navigate('/login');
             }
         }catch(e){
             console.log("Error occcered in backend!");

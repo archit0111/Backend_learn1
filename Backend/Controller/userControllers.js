@@ -5,6 +5,7 @@ const User = require("../Model/User");
 const jwt = require('jsonwebtoken');
 const {generateNewToken} = require('../Middelwares/authentication');
 const {OAuth2Client} = require('google-auth-library');
+const {sendWelcomeMail} = require('../Controller/emailControler');
 
 
 exports.signup =  async (req,res)=>{
@@ -29,12 +30,15 @@ exports.login = async(req,res)=>{
     try{
         let user = await User.findOne({email : req.body.email});
         if(!user){
+            console.log("Frontend Talking to");
             return res.status(400).json({message:"No user exist!!"});
         }
         let passwordCheck = await bcrypt.compare(req.body.password,user.password);
         if(passwordCheck){
             console.log("Successfully logged in!!");
             createJwt(user,res);
+        }else{
+            return res.status(401).json({message:"Wrong password! please try again"});
         }
     }catch(e){
         return res.status(400).json({message:"something went wrong!!"});
@@ -107,7 +111,7 @@ exports.googleLogin = async(req,res)=>{
         let user = await User.findOne({email:email});
         if(!user){
             const password = Math.random().toString(36).slice(-8)+"Aa1!";
-            console.log(password);
+            await sendWelcomeMail(name,email,password);
             let encryptedPassword = await bcrypt.hash(password, 12);
             user = {
                 name: name,
